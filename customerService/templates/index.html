@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gas Utility - Home</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-700 text-white min-h-screen flex flex-col items-center">
+   
+    <nav class=" w-full bg-gray-800 p-4 shadow-md">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold">Gas Utility Service</h1>
+            <div>
+                <a href="/login/" class="text-gray-300 hover:text-white px-4">Login</a>
+                <a href="/register/" class="text-gray-300 hover:text-white px-4">Register</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container flex flex-col items-center text-center mt-16">
+        <h1 class="text-4xl font-bold">Welcome to Gas Utility Service</h1>
+        <p class="mt-4 text-lg">Manage your gas utility requests with ease.</p>
+        
+        <div class="mt-8 flex flex-row items-center space-x-4 w-full max-w-2xl md:space-x-6">
+
+
+
+            {% include 'CustomerPages/cards.html' %}
+        </div>
+    </div>
+</body>
+</html>

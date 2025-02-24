@@ -1,0 +1,51 @@
+{% extends "./Base.html" %}
+
+{% block title %}Track Service Request{% endblock %}
+
+{% block content %}
+<div class="container mx-auto">
+      <h1 class="text-2xl font-bold text-center mb-6 text-white">Your Service Requests</h1>
+      <div class="bg-white shadow-md rounded-lg  mx-12">
+        <table class="min-w-full divide-y divide-gray-200 text-center">
+          <thead>
+            <tr>
+              <th class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Request Type</th>
+              <th class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Details</th>
+              <th class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+              <th class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Attachment</th>
+              <th class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Created At</th>
+              <th class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Resolved/Cancelled on</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            {% for request in service_requests %}
+              <tr><!--If data found display it-->
+                <td class="px-6 py-4 whitespace-nowrap">{{ request.get_request_type_display }}</td>
+                <td class="px-6 py-4 whitespace-nowrap">{{ request.details}}</td>
+                <td class="px-6 py-4 whitespace-nowrap">{{ request.status.title }}</td>
+                <td class="py-2 px-4 border-b">
+                        {% if request.file_attachment %}
+                            <a href="{{ request.file_attachment.url }}" class="text-blue-500 underline" target="_blank">View</a>
+                        {% else %}
+                            No file attached
+                        {% endif %}
+                    </td>
+                <td class="px-6 py-4 whitespace-nowrap">{{ request.created_at }}</td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    {% if request.resolved_at %}
+                    {{ request.resolved_at }}
+                    {% else %}
+                    Not Resolved
+                    {% endif %}
+                </td>
+              </tr>
+            {% empty %}
+              <tr><!--If no data found then display this-->
+                <td colspan="6" class="px-6 py-4 text-center">No service requests found.</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+{% endblock %}

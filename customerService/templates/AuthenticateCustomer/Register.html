@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Registration</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+</head>
+<body class="bg-gray-700 flex items-center justify-center min-h-screen">
+    <div class="bg-white shadow-md rounded-lg p-8 m-12 max-w-md w-full">
+        <h2 class="text-2xl font-bold mb-6 text-center">Create an Account</h2>
+        <form method="POST" action="/authenticate/register/" id="registrationForm" onsubmit="return validateForm()">
+            {% csrf_token %}
+            {% for message in messages %}
+                <div class="bg-red-500 text-white p-4 rounded mb-2">
+                    {{ message }}
+                </div>
+            {% endfor %}
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2">Username*</label>
+                <input type="text" name="username" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Enter your username" />
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2">First Name*</label>
+                <input type="text" name="firstName" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Enter your First Name" />
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2">Last Name*</label>
+                <input type="text" name="lastName" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Enter your Last Name" />
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2">Email*</label>
+                <input type="email" name="email" id="email" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Enter your Email" />
+                <span id="emailError" class="text-red-500 text-sm hidden">Please enter a valid email address.</span>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2">Password*</label>
+                <input type="password" id="password" name="password" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Enter your Password" />
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2">Confirm Password*</label>
+                <input type="password" id="confirmPassword" name="cnfPassword" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Confirm your password" />
+                <span id="passwordError" class="text-red-500 text-sm hidden">Passwords do not match.</span>
+            </div>
+            <button type="submit" class="w-full bg-blue-500 text-white font-semibold py-2 rounded-md hover:bg-blue-600 transition duration-200">Sign Up</button>
+        </form>
+        <p class="mt-4 text-center text-gray-600">
+            Already have an account? <a href="/login/" class="text-blue-500 hover:underline">Login here</a>.
+        </p>
+    </div>
+
+    <script>
+        function validateForm() {
+            const emailInput = document.getElementById('email');
+            const emailError = document.getElementById('emailError');
+            const emailRegex = /^[\w.+-]+@[a-zA-Z]+\.[a-zA-Z]{2,}$/;
+
+            // Validate email
+            if (!emailRegex.test(emailInput.value)) {
+                emailError.classList.remove('hidden');
+                emailInput.classList.add('border-red-500');
+                return false; // Email is invalid
+            } else {
+                emailError.classList.add('hidden');
+                emailInput.classList.remove('border-red-500');
+            }
+
+            const passwordInput = document.getElementById("password");
+            const confirmPasswordInput = document.getElementById("confirmPassword");
+            const passwordError = document.getElementById("passwordError");
+
+            // Validate password match
+            if (passwordInput.value !== confirmPasswordInput.value) {
+                passwordError.classList.remove("hidden");
+                passwordInput.classList.add("border-red-500");
+                confirmPasswordInput.classList.add("border-red-500");
+                return false; // Passwords don't match
+            } else {
+                passwordError.classList.add("hidden");
+                passwordInput.classList.remove("border-red-500");
+                confirmPasswordInput.classList.remove("border-red-500");
+            }
+
+            return true; // All validations passed
+        }
+    </script>
+</body>
+</html>
+ 

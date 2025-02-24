@@ -1,0 +1,145 @@
+{% extends "./Base.html" %}
+
+{% block title %}Account{% endblock %}
+
+{% block content %}
+    <!-- Account Information Section -->
+    <div class="container mx-auto mt-10">
+      <div class="max-w-md mx-auto bg-white shadow-lg rounded-lg p-6">
+        <h2 class="text-2xl font-bold mb-6 text-center">Account Information</h2>
+        {% for message in messages %}
+          <div class="{% if message.tags == 'success' %}
+              
+              bg-green-500 text-white
+
+            {% elif message.tags == 'warning' %}
+              
+              bg-red-500 text-white
+
+            {% endif %} p-4 rounded mb-2">{{ message }}</div>
+        {% endfor %}
+
+        <!-- Display User Info -->
+        <div class="mb-4">
+          <label class="block font-semibold text-gray-700">First Name:</label>
+          <p class="border rounded p-2 ">{{ request.user.first_name }}</p>
+        </div>
+
+        <div class="mb-4">
+          <label class="block font-semibold text-gray-700">Last Name:</label>
+          <p class="border rounded p-2 ">{{ request.user.last_name }}</p>
+        </div>
+
+        <div class="mb-4">
+          <label class="block font-semibold text-gray-700">Email:</label>
+          <p class="border rounded p-2 ">{{ request.user.email }}</p>
+        </div>
+
+        <div class="mb-4">
+          <label class="block font-semibold text-gray-700">Address:</label>
+          <p class="border rounded p-2 ">{{ customerData.address }}</p>
+        </div>
+
+        <div class="mb-4">
+          <label class="block font-semibold text-gray-700">Phone:</label>
+          <p class="border rounded p-2 ">{{ customerData.phone }}</p>
+        </div>
+
+        <!-- Edit Info and Change Password Buttons -->
+        <div class="mt-6 flex justify-center space-x-4">
+          <button onclick="toggleModal('editAccountModal')" class="bg-blue-500 text-white p-2 rounded hover:bg-blue-600">Edit Account Info</button>
+          <button onclick="toggleModal('changePasswordModal')" class="bg-green-500 text-white p-2 rounded hover:bg-green-600">Change Password</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Edit Account Modal -->
+    <div id="editAccountModal" class="fixed inset-0 bg-gray-700 bg-opacity-50 hidden items-center justify-center z-50">
+      <div class="bg-white p-6 rounded shadow-lg max-w-lg w-full">
+        <h2 class="text-2xl font-bold mb-4">Edit Account Information</h2>
+        <form method="POST" action="/customer/update/">
+          {% csrf_token %}
+          <div class="mb-4">
+            <label class="block font-semibold text-gray-700">First Name</label>
+            <input type="text" name="firstName" value="{{ request.user.first_name }}" class="border p-2 w-full" required/>
+          </div>
+          <div class="mb-4">
+            <label class="block font-semibold text-gray-700">Last Name</label>
+            <input type="text" name="lastName" value="{{ request.user.last_name }}" class="border p-2 w-full" required/>
+          </div>
+          <div class="mb-4">
+            <label class="block font-semibold text-gray-700">Email</label>
+            <input type="email" name="email" value="{{ request.user.email }}" class="border p-2 w-full" required/>
+          </div>
+          <div class="mb-4">
+            <label for="address" class="block text-sm font-medium">Address</label>
+            <input type="text" id="address" name="address" value="{{ customerData.address }}" class="w-full p-2 border rounded" required/>
+          </div>
+
+          <div class="mb-4">
+            <label for="phone" class="block text-sm font-medium">Phone</label>
+            <input type="text" id="phone" name="phone" value="{{ customerData.phone }}" class="w-full p-2 border rounded" required/>
+          </div>
+          <div class="flex justify-end">
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Save</button>
+            <button type="button" onclick="toggleModal('editAccountModal')" class="ml-2 bg-gray-300 px-4 py-2 rounded hover:bg-gray-400">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Change Password Modal -->
+    <div id="changePasswordModal" class="fixed inset-0 bg-gray-700 bg-opacity-50 hidden items-center justify-center z-50">
+      <div class="bg-white p-6 rounded shadow-lg max-w-lg w-full">
+        <h2 class="text-2xl font-bold mb-4">Change Password</h2>
+        <form method="POST" action="/customer/change-password/" onsubmit="return validateChangePassword()">
+          {% csrf_token %}
+          <div class="mb-4">
+            <label class="block font-semibold text-gray-700">Current Password</label>
+            <input type="password" name="currentPassword" class="border p-2 w-full" required />
+          </div>
+          <div class="mb-4">
+            <label class="block font-semibold text-gray-700">New Password</label>
+            <input type="password" name="newPassword" id="newPassword" class="border p-2 w-full" required/>
+          </div>
+          <div class="mb-4">
+            <label class="block font-semibold text-gray-700">Confirm New Password</label>
+            <input type="password" name="confirmPassword" id="confirmPassword" class="border p-2 w-full" required/>
+            <span id="passwordError" class="text-red-500 text-sm hidden">Passwords do not match.</span>
+          </div>
+          <div class="flex justify-end">
+            <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Change Password</button>
+            <button type="button" onclick="toggleModal('changePasswordModal')" class="ml-2 bg-gray-300 px-4 py-2 rounded hover:bg-gray-400">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+{% endblock %}
+
+{% block script %}
+ function toggleModal(modalID) {
+        const modal = document.getElementById(modalID)
+        modal.classList.toggle('hidden')
+        modal.classList.toggle('flex')
+      }
+
+    function validateChangePassword() {
+        const newPasswordInput = document.getElementById("newPassword");
+        const confirmPasswordInput = document.getElementById("confirmPassword");
+        const passwordError = document.getElementById("passwordError");
+
+        // Validate password match
+        if (newPasswordInput.value !== confirmPasswordInput.value) {
+            passwordError.classList.remove("hidden");
+            newPasswordInput.classList.add("border-red-500");
+            confirmPasswordInput.classList.add("border-red-500");
+            return false; // Prevent form submission
+        }else{
+          passwordError.classList.add("hidden");
+          newPasswordInput.classList.remove("border-red-500");
+          confirmPasswordInput.classList.remove("border-red-500");
+          return true;
+        } // All validations passed
+    }
+
+{% endblock %}

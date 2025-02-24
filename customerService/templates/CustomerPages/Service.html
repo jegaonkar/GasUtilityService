@@ -1,0 +1,50 @@
+{% extends "./Base.html" %}
+
+{% block title %}Submit Service Request{% endblock%}
+
+{% block content %}
+  <div class="bg-white mb-6 px-8 py-3 mt-8 rounded-lg shadow-md w-full max-w-lg">
+    <h1 class="text-2xl font-bold text-center mb-6">Submit a Service Request</h1>
+
+    <div class="container mx-auto p-6">
+    <h2 class="text-2xl font-bold mb-4">Submit a Service Request</h2>
+    
+    <form action="/customer/service/submit/" method="POST" enctype="multipart/form-data" class="bg-white p-3">{% csrf_token %}
+        
+        <div class="mb-4">
+            <label for="name" class="block font-medium">Name</label>
+            <input type="text" id="name" value="{{ request.user.first_name }} {{ request.user.last_name }}" class="w-full p-2 border border-gray-300 rounded" disabled>
+        </div>
+        
+        <div class="mb-4">
+            <label for="email" class="block font-medium">Email</label>
+            <input type="email" id="email" value="{{ request.user.email }}" class="w-full p-2 border border-gray-300 rounded" disabled>
+        </div>
+
+        <div class="mb-4">
+            <label for="requestType" class="block font-medium">Request Type</label>
+            <select name="requestType" id="requestType" class="w-full p-2 border border-gray-300 rounded" required>
+                <option value="installation">Installation</option>
+                <option value="maintenance">Maintenance</option>
+                <option value="repair">Repair</option>
+                <option value="other">Other</option>
+            </select>
+        </div>
+
+        <div class="mb-4">
+            <label for="details" class="block font-medium">Details</label>
+            <textarea name="details" id="details" rows="4" class="w-full p-2 border border-gray-300 rounded" required></textarea>
+        </div>
+
+        <div class="mb-4">
+            <label for="fileAttachment" class="block font-medium">File Attachment</label>
+            <input type="file" name="fileAttachment" id="fileAttachment" class="w-full p-2 border border-gray-300 rounded">
+        </div>
+
+        <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">Submit Request</button>
+    </form>
+</div>
+
+  
+
+{% endblock %}
