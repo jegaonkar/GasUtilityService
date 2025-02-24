@@ -8,7 +8,6 @@
 - [Running the Application](#running-the-application)
 - [Usage](#usage)
 - [Credentials](#credentials)
-- [Screenshots](#screenshots)
 
 ## Overview
 The Gas Utility Service is a web application designed to streamline service requests, account management, and tracking. Users can submit service requests, track their status, and manage their accounts efficiently.
