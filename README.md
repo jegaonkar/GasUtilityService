@@ -70,7 +70,4 @@ You can access the application by navigating to [http://127.0.0.1:8000/](http://
   ```bash
   admin1234
   ```
-
-
-   ```
     
